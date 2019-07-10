@@ -43,7 +43,9 @@ def download_pack(file_path):
 
 
 def download_mod(mod_file: dict):
-    url = BASE_DOWNLOAD_URL.format(mod_file['projectID'], mod_file['fileID'])
+    jumpUrl = BASE_DOWNLOAD_URL.format(mod_file['projectID'], mod_file['fileID'])
+    r = s.get(jumpUrl, timeout=30,allow_redirects=False)
+    url="{jump}/download/{file}/file".format(jump=r.headers['Location'],file=mod_file['fileID'])
     r = s.get(url, timeout=30)
     if r.status_code == 200:
         filename = os.path.basename(r.url)
@@ -54,7 +56,7 @@ def download_mod(mod_file: dict):
 
 
 def main():
-    file_path = r"C:\Users\Epix\Downloads\allthemods+3+v.5.8.zip"
+    file_path = r"Enigmatica2Expert-1.65d.zip"
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
     download_pack(file_path)
